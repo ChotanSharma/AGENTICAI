@@ -20,8 +20,8 @@ def generate_response(message) -> str:
 
 #define messages
 messages = [
-    {"role": "system", "content": "You are a helpful programming assistant."},
-    {"role": "user", "content": "Write a Python function that checks if a number is prime."}
+    {"role": "system", "content": "You are a helpful career assistant."},
+    {"role": "user", "content": "Write a pitch for a candidate applying for a software engineering position at a tech company. The candidate has 5 years of experience in full-stack development, is proficient in Python and JavaScript, and has led several successful projects."}
 ]
 
 response = generate_response(messages)
