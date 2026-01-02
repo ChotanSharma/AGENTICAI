@@ -43,3 +43,42 @@ tool_functions = {
     "read_file": read_file,
     "terminate_agent": terminate
 }
+
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "list_files",
+            "description": "Lists all files in the current directory.",
+            "parameters": {"type":"object", "properties": {}, "required": []
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "read_file",
+            "description": "Reads the content of a specified file in the directory.",
+            "parameters": {
+                "type":"object", 
+                "properties": {
+                    "file_name": {"type": "string"}}, 
+                "required": ["file_name"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "terminate",
+            "description": "Terminates the conversation. No further actions or interactions are possible after this. Prints the provided message for the user.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "message": {"type": "string"}
+                },
+                "required": ["message"]
+            }
+        }
+    }
+]
