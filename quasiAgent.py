@@ -63,6 +63,7 @@ def develop_custom_function():
 
     # Parse the response to get the function code
     initial_function = extract_code_block(initial_function)
+
     # printing the response of initial function
     print("\n=== Initial Function ===")
     print(initial_function)

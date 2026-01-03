@@ -1,3 +1,5 @@
+import json
+from litellm import completion
 from litellm.agents.expert_agent import prompt_expert
 from litellm.agents import register_tool, ActionContext
 # Creating the invoic categorization expert agent. This expert tales one sentence descriptions of invoices
