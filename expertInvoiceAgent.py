@@ -26,18 +26,17 @@ def categorize_expenditure(action_context: ActionContext, description: str) -> s
         action_context = action_context,
         description_of_expert = "A senior financial analyst with deep expertise in corporate spending categorization.",
         prompt = f"Given the following description: '{description}' classify the expense into one of these categories: \n{categories}" 
-
     )
 
 # Creating the purchasing rules expert agent.
 @register_tool(tags=["invoice processing", "validation"])
 def check_purchasing_rules(action_context: ActionContext, invoice_data: dict) -> dict:
     """
-    validate an invoice against company purchasing pplcies.
+    validate an invoice against company purchasing policies.
     Args:
         invoice_data: Extracted invoice details, including vendor, amount, and line items.
     Returns:
-        A dictionary indicating whether the invoice is compliant, with explanations.
+        A structured json format indicating whether the invoice is compliant, with explanations.
     """
     # Load the latest purchasing rules from the disk
     rules_path = "config/purchasing_rules.txt"
@@ -47,17 +46,26 @@ def check_purchasing_rules(action_context: ActionContext, invoice_data: dict) ->
             purchasing_rules = file.read()
     except FileNotFoundError:
         purchasing_rules = "No rules available. Assume all invoices are compliant."
+
+    validation_schema = {
+        "type": "object",
+        "properties": {
+            "compliant": {"type": "boolean"},
+            "issues": {"type": "string"}
+        }
+    }
     
-    return prompt_expert(
+    return prompt_llm_for_json(
         action_context = action_context,
-        description_of_expert = "A corporate procurement compliance officer with extensive knowledge of purchasing policies.",
+        schema = validation_schema,
         prompt = f"""Given this invoice data: {invoice_data}, check whether it complies with company purchasing rules.
         The latest purchasing rules are as follows:
         
         {purchasing_rules}
         
-        Identify any violations or missing requirements. Respond with:
-        - "compliant": true or false
-        - "issues": A brief explanation of any problems found
+        Respond with json object containing:
+        - `compliant`: true if the invoice follows all policies, false otherwise.
+        - `issues`: A brief explanation of any violations or missing requirements.
         """
     )
+
