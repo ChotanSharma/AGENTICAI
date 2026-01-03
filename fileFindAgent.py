@@ -135,6 +135,7 @@ while iterations < max_iterations:
         elif tool_name in tool_functions:
             try: 
                 result = {"result": tool_functions[tool_name](**tool_args)}
+                print(f"Result: {result}")
             except Exception as e:
                 result = {"error": f"Error executing tool '{tool_name}': {str(e)}"}
         else:
