@@ -1,0 +1,4 @@
+1. All purchases over $5,000 require pre-approval.
+2. IT equipment purchases must be from approved vendors.
+3. Travel expenses must include a justification.
+4. Consulting fees over $10,000 require an SOW (Statement of Work).
