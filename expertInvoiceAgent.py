@@ -1,7 +1,14 @@
 import json
-from litellm import completion
 from litellm.agents.expert_agent import prompt_expert
 from litellm.agents import register_tool, ActionContext
+from programmingPrompt import generate_response
+from litellm.agents.agent import Agent
+from litellm.agents.expert_agent import prompt_llm_for_json
+from litellm.agents.goals import Goal
+from litellm.agents.action_languages.agent_function_calling_language import AgentFunctionCallingActionLanguage
+from litellm.agents.environments.python_environment import PythonEnvironment    
+from litellm.agents.action_registries.python_action_registry import PythonActionRegistry
+
 # Creating the invoic categorization expert agent. This expert tales one sentence descriptions of invoices
 # of the invoice and returns the best-fitting category from our predefined list.
 
@@ -70,4 +77,42 @@ def check_purchasing_rules(action_context: ActionContext, invoice_data: dict) ->
         - `issues`: A brief explanation of any violations or missing requirements.
         """
     )
+
+# add the full agent code here
+def create_invoice_agent():
+    # Create action registry with invoice tools
+    action_registry = PythonActionRegistry()
+
+    # Define invoice processing goals
+    goals = [
+        Goal(
+            name="Persona",
+            description="You are an Invoice Processing Agent, specialized in handling invoices efficiently."
+        ),
+        Goal(
+            name="Process Invoices",
+            description="""
+            Your goal is to process invoices accurately. For each invoice:
+            1. Extract key details such as vendor, amount, and line items.
+            2. Generate a one-sentence summary of the expenditure.
+            3. Categorize the expenditure using an expert.
+            4. Validate the invoice against purchasing policies.
+            5. Store the processed invoice with categorization and validation.
+
+            6. Return a summary of the invoice processing results.
+            """
+        )
+    ]
+    # Create the expert invoice agent
+    # Define agent environment
+    environment = PythonEnvironment()
+
+    return Agent(
+        goals=goals,
+        agent_language=AgentFunctionCallingActionLanguage(),
+        action_registry=action_registry,
+        generate_response=generate_response,
+        environment=environment
+    )
+
 
